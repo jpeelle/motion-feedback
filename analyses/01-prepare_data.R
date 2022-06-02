@@ -20,7 +20,7 @@ df <- df %>% group_by(subject_number) %>% mutate(scan = row_number(subject_numbe
 
 
 # read in demographic data and add age, sex, age group to main df
-#df_demo <- read.csv("../data/demographics.csv")
+#df_demo <- read.csv("../data/participants.csv")
 
 
 
@@ -72,6 +72,49 @@ ggbarplot(dfsubject, x = "FIRMM", y = "meanFD",
           position = position_dodge(0.8))
 
 
+#---- plot FD over time ----
+
+
+# # left
+# 
+# dfall <- dfal[dfal$ear=="L",]
+# 
+# gdl <- dfall %>%
+#   group_by(agegroup, frequency) %>%
+#   summarize(threshold = mean(threshold))
+# 
+# ggplot(data = dfall, aes(x = frequency, y = threshold, group = subj, color = agegroup)) + 
+#   geom_line(alpha = 0.5, size = 0.3) +
+#   geom_line(data = gdl, aes(x = frequency, y = threshold, group = agegroup), size = 2) +
+#   theme_classic() + 
+#   labs(title = "Left", x = "Frequency (Hz)", y = "Threshold (dB HL)") +
+#   scale_x_continuous(trans="log2") + scale_x_continuous(breaks=c(500, 2000, 4000, 8000)) +
+#   scale_y_reverse() + 
+#   color_palette(palette = c("#FF9933", "#339933")) +
+#   ylim(85, -10) +
+#   theme(legend.position = "none")  
+
+
+dfmean <- df %>%
+  group_by(FIRMM, scan) %>%
+  summarize(meanFD = mean(FD))
+
+
+# hack for now to get rid of weird big number of scans
+dfmean <- dfmean[dfmean$scan<800,]
+
+
+ggplot(data = dfmean, aes(x = scan, y = meanFD, group = FIRMM, color = FIRMM)) +
+  geom_line()
+
+
+# todo:
+
+# - remove gridlines, add indicators for each run, plot single subjects for supplemental
+
+
+
+
 
 #---- model ----
 
@@ -84,6 +127,8 @@ ggbarplot(dfsubject, x = "FIRMM", y = "meanFD",
 # summary(m1)
 
 # add age group
+
+
 
 
 
