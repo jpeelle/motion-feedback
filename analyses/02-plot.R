@@ -32,15 +32,9 @@ dfsubject$FIRMM <- as.factor(dfsubject$FIRMM)
 
 
 
-# order df by FIRMM (important for ggridges)
-
-
-
-
-
-
-
 #---- how many scans per subject? this varies... ----
+
+#TODO
 
 
 
@@ -83,7 +77,6 @@ p2 <- ggplot(data = dfmean, aes(x = scan, y = meanFD, group = FIRMM, color = FIR
   ylab("Mean FD")
 
 
-
 #---- plot mean FD for FIRMM vs no FIRMM, summarized (one point per subject) ----
 
 p3 <- ggbarplot(dfsubject, x = "age_group", y = "meanFD",
@@ -107,9 +100,31 @@ ggarrange(p12, p3,
 
 
 
+#---- plot by run ----
+
+dfrun <- df %>%
+  group_by(FIRMM, run, subject_number) %>%
+  summarize(meanFD = mean(FD))
+
+dfrun$FIRMM <- as.factor(dfrun$FIRMM)
+
+
+ggbarplot(dfrun, x = "run", y = "meanFD",
+          add = c("mean_se", "jitter"),
+          error.plot = "upper_errorbar",
+          color = "FIRMM",
+          fill = "FIRMM", alpha = 0.1,
+          palette = c(nofeedbackColor, feedbackColor),
+          position = position_dodge(0.8),
+          xlab = "Run",
+          ylab = "Mean FD")
+
+
+
 
 #---- ridge plots of individual subjects ----
 
+# TODO: order by FIRMM/no FIRMM...still in progress
 ggplot(dff, aes(x = FD, y = subject_number, fill = FIRMM, height = stat(density))) +
   geom_density_ridges2(stat = "density") +
   xlim(c(0,1)) + 
