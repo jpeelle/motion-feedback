@@ -94,16 +94,12 @@ p3 <- ggbarplot(dfsubject, x = "age_group", y = "meanFD",
 
 p12 <- ggarrange(p1, p2,
           ncol = 1)
-   
-#png(filename = "FDcomparison.png",
-#    width = 6, height = 4, units = "in", pointsize = 12,
-#    bg = "white", res = 300)
 
 ggarrange(p12, p3,
           ncol = 2)          
 
-ggsave("FDcomparison.png", width = 6, height = 4, units = "in", dpi = 300)
-ggsave("FDcomparison.pdf", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/FDcomparison.png", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/FDcomparison.pdf", width = 6, height = 4, units = "in", dpi = 300)
 
 
 #---- plot by run ----
@@ -125,8 +121,8 @@ ggbarplot(dfrun, x = "run", y = "meanFD",
           xlab = "Run",
           ylab = "Mean FD")
 
-ggsave("FD_by_run.png", width = 6, height = 4, units = "in", dpi = 300)
-ggsave("FD_by_run.pdf", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/FD_by_run.png", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/FD_by_run.pdf", width = 6, height = 4, units = "in", dpi = 300)
 
 
 
