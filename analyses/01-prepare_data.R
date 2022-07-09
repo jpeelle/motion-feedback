@@ -17,9 +17,9 @@ df <- df[df$x!=0,]
 
 
 
-# add scan counter
+# add scan counter for subject (scan) and per run (runscan)
 df <- df %>% group_by(subject_number) %>% mutate(scan = row_number(subject_number))
-
+df <- df %>% group_by(subject_number, run) %>% mutate(runscan = row_number(run))
 
 # read in demographic data and add age, sex, age group to main df
 dfp <- read.csv("../data/participants.csv")
