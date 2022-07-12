@@ -35,11 +35,12 @@ m2 <- lme(FD ~ 1 + run + age_group * FIRMM,
           random = ~1 | scan,
           data = df,
           method = "ML",
-          correlation = corAR1(.99, ~ 1 | scan, FALSE))
+          correlation = corAR1(.3, ~ 1 | scan, FALSE))
 
-
-# Things that did not work:
-# - having a corAR1 of 1 (has to be under 1, but not sure what it should be
-# - having a grouping argument to corAR1 that did not match the random effects
+m3 <- lme(FD ~ 1 + scan + age_group * FIRMM,
+          random = ~ runscan | subject_number,
+          data = df,
+          method = "ML",
+          correlation = corCAR1(.2, ~ runscan | subject_number, FALSE))
 
 

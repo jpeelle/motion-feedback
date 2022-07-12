@@ -13,6 +13,8 @@ nofeedbackColor = "gray40"
 df <- read.csv("data_filtered.csv")
 dfp <- read.csv("../data/participants.csv")
 
+df$FIRMM <- as.factor(df$FIRMM)
+
 
 dfsubject <- group_by(df, subject_number) %>%
   summarize(meanFD=mean(FD),
@@ -77,6 +79,14 @@ p2 <- ggplot(data = dfmean, aes(x = scan, y = meanFD, group = FIRMM, color = FIR
   ylab("Mean FD")
 
 
+
+#---- plot distribution of all FD values for FIRMM vs. no-FIRMM ----
+
+ggplot(df, aes(x = FD, color = FIRMM)) +
+  geom_density() + 
+  theme_classic()
+
+
 #---- plot mean FD for FIRMM vs no FIRMM, summarized (one point per subject) ----
 
 p3 <- ggbarplot(dfsubject, x = "age_group", y = "meanFD",
@@ -129,9 +139,11 @@ ggsave("figures/FD_by_run.pdf", width = 6, height = 4, units = "in", dpi = 300)
 #---- ridge plots of individual subjects ----
 
 # TODO: order by FIRMM/no FIRMM...still in progress
+dff <- df %>% group_by(FIRMM)
+dff %>% arrange(subject_number, .by_group = TRUE)
 ggplot(dff, aes(x = FD, y = subject_number, fill = FIRMM, height = stat(density))) +
   geom_density_ridges2(stat = "density") +
   xlim(c(0,1)) + 
-  stat_density_ridges(quantile_lines = TRUE, quantiles = 2)
-theme_classic()
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2) +
+  theme_classic()
 
