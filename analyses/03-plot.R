@@ -16,6 +16,7 @@ dfp <- read.csv("../data/participants.csv")
 df$feedback <- as.factor(df$feedback)
 
 
+
 dfsubject <- group_by(df, subject_number) %>%
   summarize(meanFD=mean(FD),
             medianFD=median(FD),
@@ -34,6 +35,9 @@ dfsubject <- left_join(dfp, dfsubject,
 # dfsubject <- dfsubject[!is.na(dfsubject$meanFD),]
 
 dfsubject$feedback <- as.factor(dfsubject$feedback)
+
+dfsubject$age_group <- factor(dfsubject$age_group, levels = c("young", "older"))
+
 
 
 
@@ -182,14 +186,14 @@ p6 <- ggplot(data = dfmean, aes(x = frame, y = meanDVARS, group = feedback, colo
 
 
 
-#---- plot distribution of all FD values for FIRMM vs. no-FIRMM ----
+#---- plot distribution of all DVARS values for FIRMM vs. no-FIRMM ----
 
 ggplot(df, aes(x = DVARS, color = feedback)) +
   geom_density() + 
   theme_classic()
 
 
-#---- plot mean FD for FIRMM vs no FIRMM, summarized (one point per subject) ----
+#---- plot mean DVARS for FIRMM vs no FIRMM, summarized (one point per subject) ----
 
 p7 <- ggbarplot(dfsubject, x = "age_group", y = "meanDVARS",
                 add = c("mean_se", "jitter"),
@@ -214,7 +218,7 @@ ggsave("figures/DVARScomparison.png", width = 6, height = 4, units = "in", dpi =
 ggsave("figures/DVARScomparison.pdf", width = 6, height = 4, units = "in", dpi = 300)
 
 
-#---- plot by run ----
+#---- plot DVARS by run ----
 
 dfrun <- df %>%
   group_by(feedback, run, subject_number) %>%
@@ -235,4 +239,35 @@ ggbarplot(dfrun, x = "run", y = "meanDVARS",
 
 ggsave("figures/DVARS_by_run.png", width = 6, height = 4, units = "in", dpi = 300)
 ggsave("figures/DVARS_by_run.pdf", width = 6, height = 4, units = "in", dpi = 300)
+
+
+#---- tSNR ----
+
+#df <- read.csv("data_filtered.csv")
+
+dftSNR <- read.csv("tSNR_data_filtered.csv")
+
+
+dftSNRsubject <- group_by(dftSNR, subject_number) %>%
+  summarize(meantSNR=mean(mean_tSNR),
+  mediantSNR=mean(median_tSNR))
+
+dftSNRsubject$feedback <- as.factor(dftSNRsubject$feedback)
+
+dftSNRsubject <- left_join(dfp, dftSNRsubject, 
+          by = "subject_number",
+          keep = FALSE)
+
+ggbarplot(dftSNRsubject, x = "age_group", y = "meantSNR",
+          add = c("mean_se", "jitter"),
+          error.plot = "upper_errorbar",
+          color = "feedback",
+          fill = "feedback", alpha = 0.1,
+          palette = c(nofeedbackColor, feedbackColor),
+          position = position_dodge(0.8),
+          xlab = "Feedback",
+          ylab = "Whole-brain mean tSNR")
+
+ggsave("figures/mean_tSNR.png", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/mean_tSNR.pdf", width = 6, height = 4, units = "in", dpi = 300)
 

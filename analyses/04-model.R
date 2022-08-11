@@ -47,40 +47,40 @@ m2 <- lme(FD ~ 1 + frame + age_group * feedback,
 # Linear mixed-effects model fit by maximum likelihood
 # Data: df 
 # AIC       BIC   logLik
-# -19641.14 -19550.81 9830.569
+# -14874.85 -14784.52 7447.423
 # 
 # Random effects:
 #   Formula: ~frame | subject_number
 # Structure: General positive-definite, Log-Cholesky parametrization
 # StdDev       Corr  
-# (Intercept) 0.0842839781 (Intr)
-# frame       0.0001368689 -0.277
-# Residual    0.2240814684       
+# (Intercept) 0.0846033390 (Intr)
+# frame       0.0001416329 -0.243
+# Residual    0.2317320258       
 # 
 # Correlation Structure: AR(1)
 # Formula: ~frame | subject_number 
 # Parameter estimate(s):
 #   Phi 
-# 0.3973766 
+# 0.3866899 
 # Fixed effects:  FD ~ 1 + frame + age_group * feedback 
 # Value  Std.Error    DF   t-value p-value
-# (Intercept)              0.4408685 0.03710688 61779 11.881047  0.0000
-# frame                    0.0000431 0.00001661 61779  2.595558  0.0094
-# age_groupyoung          -0.1590555 0.04204294    74 -3.783168  0.0003
-# feedback                -0.1115340 0.04048551    74 -2.754912  0.0074
-# age_groupyoung:feedback  0.0433081 0.04755107    74  0.910769  0.3654
+# (Intercept)              0.4504154 0.03766628 61778 11.958053  0.0000
+# frame                    0.0000442 0.00001716 61778  2.572848  0.0101
+# age_groupyoung          -0.1659770 0.04270876    74 -3.886252  0.0002
+# feedback                -0.1193043 0.04112688    74 -2.900883  0.0049
+# age_groupyoung:feedback  0.0507396 0.04830427    74  1.050417  0.2969
 # Correlation: 
 #   (Intr) frame  ag_grp fedbck
-# frame                   -0.090                     
+# frame                   -0.081                     
 # age_groupyoung          -0.876  0.000              
-# feedback                -0.909  0.000  0.802       
-# age_groupyoung:feedback  0.774  0.000 -0.884 -0.851
+# feedback                -0.910  0.000  0.802       
+# age_groupyoung:feedback  0.775  0.000 -0.884 -0.851
 # 
 # Standardized Within-Group Residuals:
 #   Min         Q1        Med         Q3        Max 
-# -3.3574280 -0.5082019 -0.1604105  0.3018268 33.1946968 
+# -3.5430896 -0.5015948 -0.1618787  0.2942134 29.0260803 
 # 
-# Number of Observations: 61858
+# Number of Observations: 61857
 # Number of Groups: 78 
 
 
@@ -134,28 +134,28 @@ m5 <- lme(DVARS ~ 1 + frame + age_group * feedback,
 # Linear mixed-effects model fit by maximum likelihood
 # Data: df 
 # AIC      BIC    logLik
-# 658179 658269.3 -329079.5
+# 658169.3 658259.6 -329074.6
 # 
 # Random effects:
 #   Formula: ~frame | subject_number
 # Structure: General positive-definite, Log-Cholesky parametrization
 # StdDev      Corr  
-# (Intercept) 32.17666679 (Intr)
-# frame        0.04100516 -0.456
-# Residual    55.38226626       
+# (Intercept) 32.17557679 (Intr)
+# frame        0.04100525 -0.456
+# Residual    55.38268593       
 # 
 # Correlation Structure: AR(1)
 # Formula: ~frame | subject_number 
 # Parameter estimate(s):
 #   Phi 
-# 0.4578282 
+# 0.4578286 
 # Fixed effects:  DVARS ~ 1 + frame + age_group * feedback 
 # Value Std.Error    DF   t-value p-value
-# (Intercept)             244.41916 13.012741 61779 18.783064  0.0000
-# frame                     0.00611  0.004908 61779  1.244024  0.2135
-# age_groupyoung          -31.76389 14.664594    74 -2.166026  0.0335
-# feedback                -24.40944 14.121376    74 -1.728546  0.0881
-# age_groupyoung:feedback   2.21901 16.585846    74  0.133790  0.8939
+# (Intercept)             244.41952 13.012674 61778 18.783188  0.0000
+# frame                     0.00611  0.004908 61778  1.244030  0.2135
+# age_groupyoung          -31.76489 14.664553    74 -2.166100  0.0335
+# feedback                -24.40635 14.121338    74 -1.728331  0.0881
+# age_groupyoung:feedback   2.21691 16.585800    74  0.133663  0.8940
 # Correlation: 
 #   (Intr) frame  ag_grp fedbck
 # frame                   -0.136                     
@@ -165,11 +165,10 @@ m5 <- lme(DVARS ~ 1 + frame + age_group * feedback,
 # 
 # Standardized Within-Group Residuals:
 #   Min         Q1        Med         Q3        Max 
-# -3.6565131 -0.5347612 -0.1496879  0.3213161 19.1732902 
+# -3.6564918 -0.5347602 -0.1496751  0.3213417 19.1731510 
 # 
-# Number of Observations: 61858
+# Number of Observations: 61857
 # Number of Groups: 78 
-
 
 
 
@@ -180,3 +179,61 @@ m6 <- lme(DVARS ~ 1 + run + age_group * feedback,
           data = df,
           method = "ML",
           correlation = NULL)
+
+
+
+# summary(m6)
+# Linear mixed-effects model fit by maximum likelihood
+# Data: df 
+# AIC      BIC    logLik
+# 670464.3 670744.3 -335201.1
+# 
+# Random effects:
+#   Formula: ~run | subject_number
+# Structure: General positive-definite, Log-Cholesky parametrization
+# StdDev   Corr                              
+# (Intercept) 30.84138 (Intr) run2   run3   run4   run5  
+# run2        22.20677 -0.190                            
+# run3        22.88193 -0.377  0.674                     
+# run4        24.41178 -0.246  0.485  0.724              
+# run5        32.62056 -0.416  0.580  0.750  0.666       
+# run6        27.06392 -0.454  0.512  0.693  0.695  0.837
+# Residual    54.00454                                   
+# 
+# Fixed effects:  DVARS ~ 1 + run + age_group * feedback 
+# Value Std.Error    DF   t-value p-value
+# (Intercept)             243.49427 12.192275 61774 19.971192  0.0000
+# run2                      3.08907  2.623021 61774  1.177675  0.2389
+# run3                      5.56690  2.696872 61774  2.064205  0.0390
+# run4                      7.33254  2.863635 61774  2.560571  0.0105
+# run5                      5.65629  3.768866 61774  1.500794  0.1334
+# run6                      2.94432  3.157047 61774  0.932620  0.3510
+# age_groupyoung          -32.41583 13.721953    74 -2.362334  0.0208
+# feedback                -27.06506 13.213980    74 -2.048214  0.0441
+# age_groupyoung:feedback   6.10355 15.519814    74  0.393274  0.6952
+# Correlation: 
+#   (Intr) run2   run3   run4   run5   run6   ag_grp
+# run2                    -0.061                                          
+# run3                    -0.112  0.660                                   
+# run4                    -0.076  0.486  0.708                            
+# run5                    -0.123  0.573  0.733  0.656                     
+# run6                    -0.133  0.510  0.679  0.682  0.819              
+# age_groupyoung          -0.870  0.000  0.000  0.000  0.000  0.000       
+# feedback                -0.903  0.000  0.000  0.000  0.000  0.000  0.802
+# age_groupyoung:feedback  0.769  0.000  0.000  0.000  0.000  0.000 -0.884
+# fedbck
+# run2                          
+# run3                          
+# run4                          
+# run5                          
+# run6                          
+# age_groupyoung                
+# feedback                      
+# age_groupyoung:feedback -0.851
+# 
+# Standardized Within-Group Residuals:
+#   Min         Q1        Med         Q3        Max 
+# -3.5936520 -0.5249495 -0.1419796  0.3263341 19.8939736 
+# 
+# Number of Observations: 61857
+# Number of Groups: 78 

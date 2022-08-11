@@ -32,6 +32,15 @@ dfj <- left_join(df, dfp,
 write.table(dfj, file = "data_filtered.csv", sep=",", row.names = FALSE)
 
 
+#---- read tSNR data ----
+
+dftSNR <- read.csv("../data/tSNR_data.csv")
+
+dftSNRj <-  left_join(dftSNR, dfp, 
+                      by = c("subject_number"),
+                      keep = FALSE)
+
+write.table(dftSNRj, file = "tSNR_data_filtered.csv", sep=",", row.names = FALSE)
 
 
 
