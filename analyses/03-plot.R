@@ -258,6 +258,8 @@ dftSNRsubject <- left_join(dfp, dftSNRsubject,
 
 dftSNRsubject$feedback <- as.factor(dftSNRsubject$feedback)
 
+dftSNRsubject$age_group <- factor(dftSNRsubject$age_group, levels = c("young", "older"))
+
 ggbarplot(dftSNRsubject, x = "age_group", y = "meantSNR",
           add = c("mean_se", "jitter"),
           error.plot = "upper_errorbar",
@@ -265,9 +267,9 @@ ggbarplot(dftSNRsubject, x = "age_group", y = "meantSNR",
           fill = "feedback", alpha = 0.1,
           palette = c(nofeedbackColor, feedbackColor),
           position = position_dodge(0.8),
-          xlab = "Feedback",
+          xlab = "Age Group",
           ylab = "Whole-brain mean tSNR")
 
-ggsave("figures/mean_tSNR.png", width = 6, height = 4, units = "in", dpi = 300)
-ggsave("figures/mean_tSNR.pdf", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/mean_tSNR.png", width = 3, height = 4.5, units = "in", dpi = 300)
+ggsave("figures/mean_tSNR.pdf", width = 3, height = 4.5, units = "in", dpi = 300)
 
