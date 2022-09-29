@@ -243,20 +243,20 @@ ggsave("figures/DVARS_by_run.pdf", width = 6, height = 4, units = "in", dpi = 30
 
 #---- tSNR ----
 
-#df <- read.csv("data_filtered.csv")
-
 dftSNR <- read.csv("tSNR_data_filtered.csv")
 
 
 dftSNRsubject <- group_by(dftSNR, subject_number) %>%
   summarize(meantSNR=mean(mean_tSNR),
-  mediantSNR=mean(median_tSNR))
+  mediantSNR=mean(median_tSNR)
+  
 
-dftSNRsubject$feedback <- as.factor(dftSNRsubject$feedback)
 
 dftSNRsubject <- left_join(dfp, dftSNRsubject, 
           by = "subject_number",
           keep = FALSE)
+
+dftSNRsubject$feedback <- as.factor(dftSNRsubject$feedback)
 
 ggbarplot(dftSNRsubject, x = "age_group", y = "meantSNR",
           add = c("mean_se", "jitter"),

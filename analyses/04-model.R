@@ -1,5 +1,5 @@
 
-# 03-model.R
+# 04-model.R
 # See whether motion (framewise displacement; FD) is affected by feedback
 # (feedback: 0 or 1). Account for temporal autocorrelation in the timeseries data.
 
@@ -237,3 +237,51 @@ m6 <- lme(DVARS ~ 1 + run + age_group * feedback,
 # 
 # Number of Observations: 61857
 # Number of Groups: 78 
+
+
+
+#---- tSNR ----
+
+dftSNR <- read.csv("tSNR_data_filtered.csv")
+
+m8 <- lme(mean_tSNR ~ 1 + run + age_group * feedback,
+          random = ~ run | subject_number,
+          data = dftSNR,
+          method = "ML",
+          correlation = NULL)
+
+# > summary(m8)
+# Linear mixed-effects model fit by maximum likelihood
+# Data: dftSNR 
+# AIC      BIC    logLik
+# 2562.807 2600.143 -1272.403
+# 
+# Random effects:
+#   Formula: ~run | subject_number
+# Structure: General positive-definite, Log-Cholesky parametrization
+# StdDev    Corr  
+# (Intercept) 5.1821216 (Intr)
+# run         0.7560091 -0.257
+# Residual    2.6148811       
+# 
+# Fixed effects:  mean_tSNR ~ 1 + run + age_group * feedback 
+# Value Std.Error  DF   t-value p-value
+# (Intercept)             35.62189 2.3494343 389 15.161899  0.0000
+# run                     -0.01283 0.1116692 389 -0.114888  0.9086
+# age_groupyoung           5.61719 2.6542796  74  2.116276  0.0377
+# feedback                 4.51521 2.5559386  74  1.766556  0.0814
+# age_groupyoung:feedback -0.11883 3.0020112  74 -0.039584  0.9685
+# Correlation: 
+#   (Intr) run    ag_grp fedbck
+# run                     -0.117                     
+# age_groupyoung          -0.873  0.000              
+# feedback                -0.907  0.000  0.802       
+# age_groupyoung:feedback  0.772  0.000 -0.884 -0.851
+# 
+# Standardized Within-Group Residuals:
+#   Min          Q1         Med          Q3         Max 
+# -5.11176386 -0.37735370  0.00962262  0.46065257  2.94656859 
+# 
+# Number of Observations: 468
+# Number of Groups: 78 
+
