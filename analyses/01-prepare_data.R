@@ -15,6 +15,19 @@ df <- df[df$x!=0,]
 df <- df %>% group_by(subject_number) %>% mutate(frame = row_number(subject_number))
 df <- df %>% group_by(subject_number, run) %>% mutate(runframe = row_number(run))
 
+dfframes <- df %>% 
+  group_by(subject_number) %>%
+  summarize(max_frames = max(frame))
+
+# min(dfframes$max_frames)
+# [1] 763
+# > max(dfframes$max_frames)
+# [1] 846
+# > mean(dfframes$max_frames)
+# [1] 799.0513
+# > median(dfframes$max_frames)
+# [1] 794
+
 
 #---- get information from participants file to motion file ----
 

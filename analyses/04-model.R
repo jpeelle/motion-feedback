@@ -9,6 +9,29 @@ library(nlme)
 df <- read.csv("data_filtered.csv")
 
 
+#---- average reduction in FD ----
+
+# (not modeling, just how much did FD go down?)
+
+dfsubject <- df %>% group_by(subject_number) %>%
+  summarize(meanFD = mean(FD),
+            medianFD = median(FD))
+
+dfp <- read.csv("../data/participants.csv")
+dfsubject <- left_join(dfp, dfsubject, 
+                       by = "subject_number",
+                       keep = FALSE)
+
+dfsubject %>% group_by(feedback) %>% summarize(meanFD = mean(meanFD))
+
+# > dfsubject %>% group_by(feedback) %>% summarize(meanFD = mean(meanFD))
+# # A tibble: 2 × 2
+# feedback meanFD
+# <int>  <dbl>
+#   1        0  0.347
+# 2        1  0.282
+
+
 #---- model FD ----
 
 df$run <- as.factor(df$run)
@@ -89,8 +112,66 @@ m2 <- lme(FD ~ 1 + frame + age_group * feedback,
 m3 <- lme(FD ~ 1 + run + age_group * feedback,
           random = ~ run | subject_number,
           data = df,
+          method = "REML",
+          correlation = NULL)
+
+
+m3a <- lme(FD ~ 1 + run * age_group * feedback,
+          random = ~ run | subject_number,
+          data = df,
           method = "ML",
           correlation = NULL)
+
+# m3 failed to converge with method = "ML"
+
+# > summary(m3)
+# Linear mixed-effects model fit by REML
+# Data: df 
+# AIC       BIC   logLik
+# -6179.275 -5899.269 3120.637
+# 
+# Random effects:
+#   Formula: ~run | subject_number
+# Structure: General positive-definite, Log-Cholesky parametrization
+# StdDev     Corr                              
+# (Intercept) 0.08278666 (Intr) run2   run3   run4   run5  
+# run2        0.09479313 -0.134                            
+# run3        0.08375247 -0.317  0.765                     
+# run4        0.08873574 -0.171  0.552  0.720              
+# run5        0.11464313 -0.258  0.747  0.854  0.745       
+# run6        0.10375735 -0.318  0.697  0.794  0.706  0.878
+# Residual    0.22783828                                   
+# 
+# Fixed effects:  FD ~ 1 + run + age_group * feedback 
+# Value  Std.Error    DF   t-value p-value
+# (Intercept)              0.4524204 0.03491125 61774 12.959158  0.0000
+# run2                     0.0198209 0.01118544 61774  1.772030  0.0764
+# run3                     0.0294646 0.00999432 61774  2.948129  0.0032
+# run4                     0.0358940 0.01053085 61774  3.408465  0.0007
+# run5                     0.0352148 0.01335915 61774  2.636004  0.0084
+# run6                     0.0278481 0.01217601 61774  2.287125  0.0222
+# age_groupyoung          -0.1769315 0.03945612    74 -4.484260  0.0000
+# feedback                -0.1344319 0.03799784    74 -3.537883  0.0007
+# age_groupyoung:feedback  0.0724903 0.04462674    74  1.624370  0.1085
+# Correlation: 
+#   (Intr) run2   run3   run4   run5   run6   ag_grp fedbck
+# run2                    -0.047                                                 
+# run3                    -0.095  0.740                                          
+# run4                    -0.057  0.547  0.698                                   
+# run5                    -0.078  0.729  0.824  0.726                            
+# run6                    -0.094  0.682  0.768  0.689  0.853                     
+# age_groupyoung          -0.873  0.000  0.000  0.000  0.000  0.000              
+# feedback                -0.907  0.000  0.000  0.000  0.000  0.000  0.802       
+# age_groupyoung:feedback  0.772  0.000  0.000  0.000  0.000  0.000 -0.884 -0.851
+# 
+# Standardized Within-Group Residuals:
+#   Min         Q1        Med         Q3        Max 
+# -3.9093458 -0.4939251 -0.1547667  0.3020147 29.6137869 
+# 
+# Number of Observations: 61857
+# Number of Groups: 78 
+# > 
+
 
 
 
