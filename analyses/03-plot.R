@@ -248,9 +248,8 @@ dftSNR <- read.csv("tSNR_data_filtered.csv")
 
 dftSNRsubject <- group_by(dftSNR, subject_number) %>%
   summarize(meantSNR=mean(mean_tSNR),
-  mediantSNR=mean(median_tSNR)
+  mediantSNR=mean(median_tSNR))
   
-
 
 dftSNRsubject <- left_join(dfp, dftSNRsubject, 
           by = "subject_number",
@@ -272,4 +271,21 @@ ggbarplot(dftSNRsubject, x = "age_group", y = "meantSNR",
 
 ggsave("figures/mean_tSNR.png", width = 3, height = 4.5, units = "in", dpi = 300)
 ggsave("figures/mean_tSNR.pdf", width = 3, height = 4.5, units = "in", dpi = 300)
+
+
+#---- accuracy ----
+
+ggbarplot(dfsubject, x = "age_group", y = "accuracy",
+          add = c("mean_se", "jitter"),
+          error.plot = "upper_errorbar",
+          color = "feedback",
+          fill = "feedback", alpha = 0.1,
+          palette = c(nofeedbackColor, feedbackColor),
+          position = position_dodge(0.8),
+          xlab = "Age Group",
+          ylab = "Accuracy")
+
+
+ggsave("figures/accuracy.png", width = 3, height = 4.5, units = "in", dpi = 300)
+ggsave("figures/accuracy.pdf", width = 3, height = 4.5, units = "in", dpi = 300)
 
