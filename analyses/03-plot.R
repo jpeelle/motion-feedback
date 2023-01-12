@@ -41,12 +41,6 @@ dfsubject$age_group <- factor(dfsubject$age_group, levels = c("young", "older"))
 
 
 
-#---- how many scans per subject? this varies... ----
-
-#TODO
-
-
-
 
 
 #---- plot FD over time for 2 subjects ----
@@ -112,7 +106,8 @@ p12 <- ggarrange(p1, p2,
           ncol = 1)
 
 ggarrange(p12, p3,
-          ncol = 2)          
+          ncol = 2,
+          labels = "auto")          
 
 ggsave("figures/FDcomparison.png", width = 6, height = 4, units = "in", dpi = 300)
 ggsave("figures/FDcomparison.pdf", width = 6, height = 4, units = "in", dpi = 300)
@@ -139,21 +134,6 @@ ggbarplot(dfrun, x = "run", y = "meanFD",
 
 ggsave("figures/FD_by_run.png", width = 6, height = 4, units = "in", dpi = 300)
 ggsave("figures/FD_by_run.pdf", width = 6, height = 4, units = "in", dpi = 300)
-
-
-
-#---- ridge plots of individual subjects ----
-
-# TODO: order by FIRMM/no FIRMM...still in progress
-# dff <- df %>% group_by(FIRMM)
-# dff %>% arrange(subject_number, .by_group = TRUE)
-# ggplot(dff, aes(x = FD, y = subject_number, fill = FIRMM, height = stat(density))) +
-#   geom_density_ridges2(stat = "density") +
-#   xlim(c(0,1)) + 
-#   stat_density_ridges(quantile_lines = TRUE, quantiles = 2) +
-#   theme_classic()
-
-
 
 
 
@@ -186,11 +166,70 @@ p6 <- ggplot(data = dfmean, aes(x = frame, y = meanDVARS, group = feedback, colo
 
 
 
+#---- plot distribution of all DVARS values for FIRMM vs. no-FIRMM, and histograms ----
+
+pdens <- ggplot(df, aes(x = FD, color = feedback)) +
+  geom_density() + 
+  xlim(0, 2) +
+  scale_color_manual(values = c(nofeedbackColor, feedbackColor)) +
+  theme_classic()
+
+
+hbreaks <- c(0, .2, .4, .6, .8, 1, 1.2, 1.4, 1.6, 1.8, 2)
+
+x <- df$FD[df$feedback==0]
+x <- x[x<=2]
+
+histnofeedback <- hist(x,
+                        breaks = hbreaks)
+
+
+x <- df$FD[df$feedback==1]
+x <- x[x<=2]
+
+histfeedback <- hist(x,
+                      breaks = hbreaks)
+
+
+# Histogram for feedback and no feedback
+hf <- histfeedback$density / histnofeedback$density
+
+hnf <- histnofeedback$density / histnofeedback$density
+
+# Put into data frame - one mnore break than count, make sure all have the same length
+fdbreak <- hbreaks[1:length(hbreaks)-1]
+hdf <- data.frame(fdbreak, hf, hnf)
+
+hdf <- pivot_longer(hdf, cols = c("hf"), names_to = "feedback", values_to = "density")
+hdf$feedback <- as.factor(hdf$feedback)
+
+pprop <- ggplot(data = hdf, aes(x = fdbreak,
+                       y = density)) +
+  geom_bar(stat = "identity", fill = feedbackColor) +
+  xlab("FD") +
+  scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2)) +
+  ylab("Proportion relative to no feedback") +
+  scale_fill_manual(values=feedbackColor) +
+  geom_hline(yintercept=1, linetype="dashed", color = nofeedbackColor) +
+  theme_classic() 
+
+pdensprop <- ggarrange(pdens, pprop, 
+                       ncol = 2,
+                       labels = "auto")
+
+
+ggsave("figures/FDdensity.png", width = 6, height = 4, units = "in", dpi = 300)
+ggsave("figures/FDdensity.pdf", width = 6, height = 4, units = "in", dpi = 300)
+
+
+
+
+
 #---- plot distribution of all DVARS values for FIRMM vs. no-FIRMM ----
 
 ggplot(df, aes(x = DVARS, color = feedback)) +
   geom_density() + 
-  theme_classic()
+  theme_classic() 
 
 
 #---- plot mean DVARS for FIRMM vs no FIRMM, summarized (one point per subject) ----
@@ -212,7 +251,8 @@ p56 <- ggarrange(p5, p6,
                  ncol = 1)
 
 ggarrange(p56, p7,
-          ncol = 2)          
+          ncol = 2,
+          labels = "auto")          
 
 ggsave("figures/DVARScomparison.png", width = 6, height = 4, units = "in", dpi = 300)
 ggsave("figures/DVARScomparison.pdf", width = 6, height = 4, units = "in", dpi = 300)

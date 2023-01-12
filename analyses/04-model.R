@@ -366,3 +366,33 @@ m8 <- lme(mean_tSNR ~ 1 + run + age_group * feedback,
 # Number of Observations: 468
 # Number of Groups: 78 
 
+
+#---- accuracy ----
+
+m9 <- lm(accuracy ~ 1 + age_group * feedback,
+          data = dfsubject)
+
+summary(m9)
+
+# 
+# > summary(m9)
+# 
+# Call:
+#   lm(formula = accuracy ~ 1 + age_group * feedback, data = dfsubject)
+# 
+# Residuals:
+#   Min       1Q   Median       3Q      Max 
+# -0.40721 -0.02096  0.00909  0.04570  0.12195 
+# 
+# Coefficients:
+#   Estimate Std. Error t value Pr(>|t|)    
+# (Intercept)               0.861746   0.022468  38.354   <2e-16 ***
+#   age_groupolder           -0.082580   0.047130  -1.752   0.0839 .  
+# feedback1                 0.005049   0.027958   0.181   0.8572    
+# age_groupolder:feedback1 -0.072837   0.053305  -1.366   0.1759    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Residual standard error: 0.09264 on 74 degrees of freedom
+# Multiple R-squared:  0.3825,	Adjusted R-squared:  0.3575 
+# F-statistic: 15.28 on 3 and 74 DF,  p-value: 7.84e-08
