@@ -2,9 +2,8 @@
 library(tidyverse)
 library(ggplot2)
 library(ggpubr)
-library(ggridges)
 
-feedbackColor = "green"
+feedbackColor = "steelblue1"
 nofeedbackColor = "gray40"
 
 
@@ -13,7 +12,14 @@ nofeedbackColor = "gray40"
 df <- read.csv("data_filtered.csv")
 dfp <- read.csv("../data/participants.csv")
 
-df$feedback <- as.factor(df$feedback)
+dfp$feedback[dfp$feedback==1] <- "yes"
+dfp$feedback[dfp$feedback==0] <- "no"
+dfp$feedback <- factor(dfp$feedback, levels = c("no", "yes"))
+
+df$feedback[df$feedback==1] <- "yes"
+df$feedback[df$feedback==0] <- "no"
+df$feedback <- factor(df$feedback, levels = c("no", "yes"))
+
 
 
 
@@ -98,7 +104,7 @@ p3 <- ggbarplot(dfsubject, x = "age_group", y = "meanFD",
           position = position_dodge(0.8),
           xlab = "Age Group",
           ylab = "Mean FD")
-  
+
 
 #---- combine these three plots (p1, p2, p3) into a single plot ----
 
@@ -177,14 +183,14 @@ pdens <- ggplot(df, aes(x = FD, color = feedback)) +
 
 hbreaks <- c(0, .2, .4, .6, .8, 1, 1.2, 1.4, 1.6, 1.8, 2)
 
-x <- df$FD[df$feedback==0]
+x <- df$FD[df$feedback=="no"]
 x <- x[x<=2]
 
 histnofeedback <- hist(x,
                         breaks = hbreaks)
 
 
-x <- df$FD[df$feedback==1]
+x <- df$FD[df$feedback=="yes"]
 x <- x[x<=2]
 
 histfeedback <- hist(x,
